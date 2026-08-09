@@ -35,8 +35,10 @@ private:
             return -1.0;
         }
 
-        auto elapsed = std::chrono::duration_cast<Units>(mEnd - mStart);
-        return elapsed.count();
+        // Cast to a floating-point duration so sub-unit times keep their
+        // fractional part instead of truncating to 0.
+        using FloatUnits = std::chrono::duration<double, typename Units::period>;
+        return std::chrono::duration_cast<FloatUnits>(mEnd - mStart).count();
     }
 
     std::chrono::time_point<std::chrono::high_resolution_clock> mStart;
