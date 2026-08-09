@@ -1,23 +1,19 @@
-# Specify the minimum version for CMake
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.12)
 
-# Project's name
-project(AdventOfCode)
+project(AdventOfCode CXX)
 
-# Set the C++ standard
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_CXX_FLAGS "-O3")
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Include directories
-include_directories(include)
-include_directories(.)
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
 
-# Add the executable
-add_executable(aoc src/main.cpp)
+# Every year directory contributes one .cpp per solved day; each file
+# self-registers with the runner via AOC_REGISTER.
+file(GLOB SOLUTION_SOURCES CONFIGURE_DEPENDS
+     "${CMAKE_CURRENT_SOURCE_DIR}/20*/*.cpp")
 
-# Specify additional files to be included in the compilation
-# Assuming your 2023 directory contains multiple cpp files,
-# list them all here separated by spaces.
-# Example: 2023/05.cpp 2023/anotherFile.cpp
-# target_sources(AdventOfCode PRIVATE 2023/05.cpp)
+add_executable(aoc src/main.cpp ${SOLUTION_SOURCES})
+target_include_directories(aoc PRIVATE include)

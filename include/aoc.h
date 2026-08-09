@@ -1,25 +1,26 @@
 #pragma once
 
 #include "Timer.h"
+#include <cstdint>
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <utility>
+#include <vector>
 
 class SolutionBase
 {
 public:
-    SolutionBase(const std::string& filename)
+    explicit SolutionBase(const std::string& filename)
     {
         std::ifstream fin(filename);
         if (!fin.is_open()) {
-            throw std::runtime_error("Unable to open file");
+            throw std::runtime_error("Unable to open file: " + filename);
         }
 
         std::stringstream buffer;
         buffer << fin.rdbuf();
         mInput = buffer.str();
-        fin.close();
     }
 
     virtual ~SolutionBase() = default;
@@ -27,30 +28,32 @@ public:
     virtual uint64_t partA() const = 0;
     virtual uint64_t partB() const = 0;
 
-    std::pair<uint64_t, double> runAndTimePartA() const 
+    std::pair<uint64_t, double> runAndTimePartA() const
     {
-        Timer timer;
-        timer.start();
-        uint64_t result = partA();
-        timer.stop();
-        return { result, timer.getElapsedMilliseconds() };
+        return runAndTime([this] { return partA(); });
     }
 
-    std::pair<uint64_t, double> runAndTimePartB() const 
+    std::pair<uint64_t, double> runAndTimePartB() const
     {
-        Timer timer;
-        timer.start();
-        uint64_t result = partB();
-        timer.stop();
-        return { result, timer.getElapsedMilliseconds() };
+        return runAndTime([this] { return partB(); });
     }
 
 protected:
     std::string mInput;
+
+private:
+    template <typename Fn>
+    std::pair<uint64_t, double> runAndTime(Fn&& fn) const
+    {
+        Timer timer;
+        timer.start();
+        uint64_t result = fn();
+        timer.stop();
+        return { result, timer.getElapsedMilliseconds() };
+    }
 };
 
-std::vector<std::string> 
-split(const std::string& str, const std::string& delimiter) 
+inline std::vector<std::string> split(const std::string& str, const std::string& delimiter)
 {
     std::vector<std::string> splits;
     size_t last = 0;
