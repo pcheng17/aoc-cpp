@@ -1,7 +1,6 @@
 #pragma once
 
 #include "AoC.h"
-#include <cstdint>
 #include <functional>
 #include <map>
 #include <memory>
@@ -22,8 +21,8 @@ struct PuzzleId
 struct SolutionInfo
 {
     std::function<std::unique_ptr<SolutionBase>(const std::string&)> factory;
-    std::optional<int64_t> expectedA;
-    std::optional<int64_t> expectedB;
+    std::optional<Answer> expectedA;
+    std::optional<Answer> expectedB;
 };
 
 // Ordered by (year, day) so --all runs chronologically.

@@ -1,4 +1,5 @@
 #include "Registry.h"
+#include <algorithm>
 
 namespace aoc {
 
@@ -7,7 +8,7 @@ class Solution02 final : public SolutionBase
 public:
     using SolutionBase::SolutionBase;
 
-    int64_t partA() const override
+    Answer partA() const override
     {
         std::array<int, 26> counts{};
         int twos = 0;
@@ -15,35 +16,17 @@ public:
         for (const auto line : split(mInput, "\n"))
         {
             counts.fill(0);
-            bool hasTwo = false;
-            bool hasThree = false;
             for (const char c : line)
             {
                 ++counts[c - 'a'];
             }
-            for (const int count : counts)
-            {
-                if (count == 2 && !hasTwo)
-                {
-                    ++twos;
-                    hasTwo = true;
-                }
-                else if (count == 3 && !hasThree)
-                {
-                    ++threes;
-                    hasThree = true;
-                }
-
-                if (hasTwo && hasThree)
-                {
-                    break;
-                }
-            }
+            twos += int(std::ranges::contains(counts, 2));
+            threes += int(std::ranges::contains(counts, 3));
         }
         return twos * threes;
     }
 
-    int64_t partB() const override
+    Answer partB() const override
     {
         return 0;
     }

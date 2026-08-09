@@ -13,12 +13,12 @@ configure-debug:
 # Build (configures first if needed)
 build:
     @test -d build || just configure
-    cmake --build build
+    cmake --build build -j8
 
 # Build the Debug variant
 build-debug:
     @test -d build-debug || just configure-debug
-    cmake --build build-debug
+    cmake --build build-debug -j8
 
 # Run all registered days
 run-all: build

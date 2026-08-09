@@ -3,18 +3,23 @@
 #include "Timer.h"
 #include <cstdint>
 #include <fstream>
+#include <ostream>
 #include <ranges>
 #include <sstream>
 #include <string>
 #include <string_view>
-#include <vector>
+#include <variant>
 
 namespace aoc
 {
 
+// Puzzle answers are usually numeric, but some are strings (e.g. a passphrase
+// of letters). Solutions can return either; comparison and printing just work.
+using Answer = std::variant<int64_t, std::string>;
+
 struct TimedResult
 {
-    int64_t answer;
+    Answer answer;
     double milliseconds;
 };
 
@@ -36,8 +41,8 @@ public:
 
     virtual ~SolutionBase() = default;
 
-    virtual int64_t partA() const = 0;
-    virtual int64_t partB() const = 0;
+    virtual Answer partA() const = 0;
+    virtual Answer partB() const = 0;
 
     TimedResult runAndTimePartA() const
     {
@@ -58,7 +63,7 @@ private:
     {
         Timer timer;
         timer.start();
-        int64_t answer = fn();
+        Answer answer = fn();
         timer.stop();
         return {answer, timer.getElapsedMilliseconds()};
     }
@@ -76,3 +81,11 @@ inline auto split(std::string_view str, std::string_view delimiter)
 }
 
 } // namespace aoc
+
+// Global namespace: ADL can't find this in aoc, because Answer is an alias of
+// std::variant whose associated namespace is std, not aoc.
+inline std::ostream& operator<<(std::ostream& os, const aoc::Answer& answer)
+{
+    std::visit([&os](const auto& value) { os << value; }, answer);
+    return os;
+}

@@ -15,9 +15,9 @@ public:
     using Map = std::vector<MapRule>;
     using MapCollection = std::vector<Map>;
 
-    int64_t partA() const override { return 0; }
+    Answer partA() const override { return 0; }
 
-    int64_t partB() const override
+    Answer partB() const override
     {
         const auto groups = split(mInput, "\n\n") | std::ranges::to<std::vector<std::string>>();
         const SeedRanges seeds = parseSeeds(groups[0].substr(7));

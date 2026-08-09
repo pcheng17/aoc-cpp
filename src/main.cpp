@@ -26,7 +26,7 @@ std::string resolveInputPath(aoc::PuzzleId id)
     return "../" + relative;
 }
 
-bool checkAnswer(const char* label, int64_t actual, const std::optional<int64_t>& expected)
+bool checkAnswer(const char* label, const aoc::Answer& actual, const std::optional<aoc::Answer>& expected)
 {
     if (expected && actual != *expected) {
         std::cout << "   ❌ Part " << label << ": got " << actual << ", expected " << *expected

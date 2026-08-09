@@ -11,7 +11,7 @@ class Solution01 final : public SolutionBase
 public:
     using SolutionBase::SolutionBase;
 
-    int64_t partA() const override
+    Answer partA() const override
     {
         int64_t result = 0;
 
@@ -25,7 +25,7 @@ public:
         return result;
     }
 
-    int64_t partB() const override
+    Answer partB() const override
     {
         int64_t result = 0;
         std::vector<int64_t> numbers;
