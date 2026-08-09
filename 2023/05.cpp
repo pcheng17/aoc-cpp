@@ -19,7 +19,7 @@ public:
 
     int64_t partB() const override
     {
-        const std::vector<std::string> groups = split(mInput, "\n\n");
+        const auto groups = split(mInput, "\n\n") | std::ranges::to<std::vector<std::string>>();
         const SeedRanges seeds = parseSeeds(groups[0].substr(7));
         MapCollection maps;
         for (size_t i = 1; i < groups.size(); ++i) {
@@ -51,7 +51,7 @@ private:
     SeedRanges parseSeeds(const std::string& str) const
     {
         SeedRanges seeds;
-        const auto splits = split(str, " ");
+        const auto splits = split(str, " ") | std::ranges::to<std::vector<std::string>>();
         for (size_t i = 0; i < splits.size(); i += 2) {
             seeds.emplace_back(std::stoull(splits[i]), std::stoull(splits[i + 1]));
         }
@@ -61,12 +61,12 @@ private:
     Map parseMap(const std::string& str) const
     {
         Map map;
-        const auto splits = split(str, "\n");
+        const auto splits = split(str, "\n") | std::ranges::to<std::vector<std::string>>();
         for (size_t i = 1; i < splits.size(); ++i) {
             if (splits[i].empty()) {
                 continue;
             }
-            const auto lineSplits = split(splits[i], " ");
+            const auto lineSplits = split(splits[i], " ") | std::ranges::to<std::vector<std::string>>();
             map.push_back(
                 MapRule{
                     std::stoull(lineSplits[0]),

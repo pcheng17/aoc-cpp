@@ -3,8 +3,10 @@
 #include "Timer.h"
 #include <cstdint>
 #include <fstream>
+#include <ranges>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace aoc
@@ -29,6 +31,7 @@ public:
         std::stringstream buffer;
         buffer << fin.rdbuf();
         mInput = buffer.str();
+        fin.close();
     }
 
     virtual ~SolutionBase() = default;
@@ -61,17 +64,15 @@ private:
     }
 };
 
-inline std::vector<std::string> split(const std::string& str, const std::string& delimiter)
+// Lazily splits `str` on `delimiter`, yielding std::string_views into `str` —
+// no allocation, and parts are only produced as you iterate. The views borrow
+// from `str`, so the source string must outlive the range. When you need
+// random access or size(), materialize:
+//   split(s, "\n") | std::ranges::to<std::vector<std::string>>()
+inline auto split(std::string_view str, std::string_view delimiter)
 {
-    std::vector<std::string> splits;
-    size_t last = 0;
-    size_t next = 0;
-    while ((next = str.find(delimiter, last)) != std::string::npos) {
-        splits.push_back(str.substr(last, next - last));
-        last = next + delimiter.size();
-    }
-    splits.push_back(str.substr(last));
-    return splits;
+    return str | std::views::split(delimiter) |
+           std::views::transform([](auto&& part) { return std::string_view(part); });
 }
 
 } // namespace aoc
