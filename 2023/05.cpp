@@ -76,4 +76,4 @@ private:
     }
 };
 
-AOC_REGISTER(2023, 5, Solution05);
+// AOC_REGISTER(2023, 5, Solution05);
