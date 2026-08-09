@@ -1,4 +1,4 @@
-#include "registry.h"
+#include "Registry.h"
 #include <array>
 #include <vector>
 
@@ -15,9 +15,9 @@ public:
     using Map = std::vector<MapRule>;
     using MapCollection = std::vector<Map>;
 
-    uint64_t partA() const override { return 0; }
+    int64_t partA() const override { return 0; }
 
-    uint64_t partB() const override
+    int64_t partB() const override
     {
         const std::vector<std::string> groups = split(mInput, "\n\n");
         const SeedRanges seeds = parseSeeds(groups[0].substr(7));
@@ -39,7 +39,7 @@ public:
 
             for (const auto& [start, rng] : seeds) {
                 if (start <= t && t < start + rng) {
-                    return current;
+                    return static_cast<int64_t>(current);
                 }
             }
 

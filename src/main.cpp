@@ -1,4 +1,4 @@
-#include "registry.h"
+#include "Registry.h"
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -26,7 +26,7 @@ std::string resolveInputPath(aoc::PuzzleId id)
     return "../" + relative;
 }
 
-bool checkAnswer(const char* label, uint64_t actual, const std::optional<uint64_t>& expected)
+bool checkAnswer(const char* label, int64_t actual, const std::optional<int64_t>& expected)
 {
     if (expected && actual != *expected) {
         std::cout << "   ❌ Part " << label << ": got " << actual << ", expected " << *expected

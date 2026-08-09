@@ -12,7 +12,7 @@ namespace aoc
 
 struct TimedResult
 {
-    uint64_t answer;
+    int64_t answer;
     double milliseconds;
 };
 
@@ -33,8 +33,8 @@ public:
 
     virtual ~SolutionBase() = default;
 
-    virtual uint64_t partA() const = 0;
-    virtual uint64_t partB() const = 0;
+    virtual int64_t partA() const = 0;
+    virtual int64_t partB() const = 0;
 
     TimedResult runAndTimePartA() const
     {
@@ -55,7 +55,7 @@ private:
     {
         Timer timer;
         timer.start();
-        uint64_t answer = fn();
+        int64_t answer = fn();
         timer.stop();
         return {answer, timer.getElapsedMilliseconds()};
     }

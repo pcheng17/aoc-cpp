@@ -19,7 +19,7 @@ fi
 
 mkdir -p "$year"
 cat > "$file" <<EOF
-#include "registry.h"
+#include "Registry.h"
 
 namespace aoc {
 
@@ -28,12 +28,12 @@ class Solution$dd final : public SolutionBase
 public:
     using SolutionBase::SolutionBase;
 
-    uint64_t partA() const override
+    int64_t partA() const override
     {
         return 0;
     }
 
-    uint64_t partB() const override
+    int64_t partB() const override
     {
         return 0;
     }
