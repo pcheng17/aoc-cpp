@@ -48,7 +48,8 @@ bool runSolution(aoc::PuzzleId id, const aoc::SolutionInfo& info, const std::str
         const aoc::TimedResult a = solution->runAndTimePartA();
         const aoc::TimedResult b = solution->runAndTimePartB();
 
-        std::cout << "   Part A: " << a.answer << " :: " << a.milliseconds << " ms\n"
+        std::cout << std::fixed << std::setprecision(3)
+                  << "   Part A: " << a.answer << " :: " << a.milliseconds << " ms\n"
                   << "   Part B: " << b.answer << " :: " << b.milliseconds << " ms" << std::endl;
 
         const bool okA = checkAnswer("A", a.answer, info.expectedA);
