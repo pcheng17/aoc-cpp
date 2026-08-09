@@ -8,6 +8,9 @@
 #include <optional>
 #include <string>
 
+namespace aoc
+{
+
 struct PuzzleId
 {
     int year;
@@ -35,10 +38,7 @@ public:
         return registry;
     }
 
-    void add(PuzzleId id, SolutionInfo info)
-    {
-        mSolutions.emplace(id, std::move(info));
-    }
+    void add(PuzzleId id, SolutionInfo info) { mSolutions.emplace(id, std::move(info)); }
 
     const SolutionMap& solutions() const { return mSolutions; }
 
@@ -50,22 +50,21 @@ private:
 
 struct Registrar
 {
-    Registrar(PuzzleId id, SolutionInfo info)
-    {
-        Registry::instance().add(id, std::move(info));
-    }
+    Registrar(PuzzleId id, SolutionInfo info) { Registry::instance().add(id, std::move(info)); }
 };
+
+} // namespace aoc
 
 // Registers a solution class for a given year/day. Optionally pass the known
 // answers for parts A and B; the runner will verify them on every run:
 //   AOC_REGISTER(2023, 5, Solution05)
 //   AOC_REGISTER(2023, 5, Solution05, 1181555926, 37806486)
-#define AOC_REGISTER(year, day, Class, ...)                                  \
-    static const Registrar registrar_##year##_##day(                         \
-        PuzzleId{ year, day },                                               \
-        SolutionInfo{                                                        \
-            [](const std::string& filename)                                  \
-                -> std::unique_ptr<SolutionBase> {                           \
-                return std::make_unique<Class>(filename);                    \
-            },                                                               \
-            ##__VA_ARGS__ })
+// Fully qualified so it works inside or outside namespace aoc.
+#define AOC_REGISTER(year, day, Class, ...)                                                        \
+    static const ::aoc::Registrar registrar_##year##_##day(                                        \
+        ::aoc::PuzzleId{year, day},                                                                \
+        ::aoc::SolutionInfo{                                                                       \
+            [](const std::string& filename) -> std::unique_ptr<::aoc::SolutionBase> {              \
+                return std::make_unique<Class>(filename);                                          \
+            },                                                                                     \
+            ##__VA_ARGS__})

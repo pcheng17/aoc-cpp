@@ -6,17 +6,17 @@
 #include <sstream>
 #include <string>
 
-namespace {
+namespace
+{
 
-std::string defaultInputPath(PuzzleId id)
+std::string defaultInputPath(aoc::PuzzleId id)
 {
     std::ostringstream path;
-    path << "inputs/" << id.year << "/"
-         << std::setw(2) << std::setfill('0') << id.day << ".txt";
+    path << "inputs/" << id.year << "/" << std::setw(2) << std::setfill('0') << id.day << ".txt";
     return path.str();
 }
 
-std::string resolveInputPath(PuzzleId id)
+std::string resolveInputPath(aoc::PuzzleId id)
 {
     const std::string relative = defaultInputPath(id);
     if (std::ifstream(relative).good()) {
@@ -26,35 +26,30 @@ std::string resolveInputPath(PuzzleId id)
     return "../" + relative;
 }
 
-bool checkAnswer(const char* label, uint64_t actual,
-                 const std::optional<uint64_t>& expected)
+bool checkAnswer(const char* label, uint64_t actual, const std::optional<uint64_t>& expected)
 {
     if (expected && actual != *expected) {
-        std::cout << "   ❌ Part " << label << ": got " << actual
-                  << ", expected " << *expected << std::endl;
+        std::cout << "   ❌ Part " << label << ": got " << actual << ", expected " << *expected
+                  << std::endl;
         return false;
     }
     return true;
 }
 
-bool runSolution(PuzzleId id, const SolutionInfo& info,
-                 const std::string& inputOverride)
+bool runSolution(aoc::PuzzleId id, const aoc::SolutionInfo& info, const std::string& inputOverride)
 {
-    const std::string inputPath = inputOverride.empty()
-        ? resolveInputPath(id)
-        : inputOverride;
+    const std::string inputPath = inputOverride.empty() ? resolveInputPath(id) : inputOverride;
 
-    std::cout << "🎄 " << id.year << " Day "
-              << std::setw(2) << std::setfill('0') << id.day << std::endl;
+    std::cout << "🎄 " << id.year << " Day " << std::setw(2) << std::setfill('0') << id.day
+              << std::endl;
 
     try {
         const auto solution = info.factory(inputPath);
-        const TimedResult a = solution->runAndTimePartA();
-        const TimedResult b = solution->runAndTimePartB();
+        const aoc::TimedResult a = solution->runAndTimePartA();
+        const aoc::TimedResult b = solution->runAndTimePartB();
 
         std::cout << "   Part A: " << a.answer << " :: " << a.milliseconds << " ms\n"
-                  << "   Part B: " << b.answer << " :: " << b.milliseconds << " ms"
-                  << std::endl;
+                  << "   Part B: " << b.answer << " :: " << b.milliseconds << " ms" << std::endl;
 
         const bool okA = checkAnswer("A", a.answer, info.expectedA);
         const bool okB = checkAnswer("B", b.answer, info.expectedB);
@@ -68,7 +63,7 @@ bool runSolution(PuzzleId id, const SolutionInfo& info,
 bool runAll()
 {
     bool allOk = true;
-    for (const auto& [id, info] : Registry::instance().solutions()) {
+    for (const auto& [id, info] : aoc::Registry::instance().solutions()) {
         allOk = runSolution(id, info, "") && allOk;
     }
     return allOk;
@@ -96,14 +91,13 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    const PuzzleId id{ std::stoi(argv[1]), std::stoi(argv[2]) };
+    const aoc::PuzzleId id{std::stoi(argv[1]), std::stoi(argv[2])};
     const std::string inputOverride = argc == 5 ? argv[4] : "";
 
-    const auto& solutions = Registry::instance().solutions();
+    const auto& solutions = aoc::Registry::instance().solutions();
     const auto it = solutions.find(id);
     if (it == solutions.end()) {
-        std::cout << "No solution registered for " << id.year << " day "
-                  << id.day << std::endl;
+        std::cout << "No solution registered for " << id.year << " day " << id.day << std::endl;
         return 1;
     }
 

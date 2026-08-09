@@ -7,6 +7,9 @@
 #include <string>
 #include <vector>
 
+namespace aoc
+{
+
 struct TimedResult
 {
     uint64_t answer;
@@ -47,14 +50,14 @@ protected:
     std::string mInput;
 
 private:
-    template <typename Fn>
+    template<typename Fn>
     TimedResult runAndTime(Fn&& fn) const
     {
         Timer timer;
         timer.start();
         uint64_t answer = fn();
         timer.stop();
-        return { answer, timer.getElapsedMilliseconds() };
+        return {answer, timer.getElapsedMilliseconds()};
     }
 };
 
@@ -70,3 +73,5 @@ inline std::vector<std::string> split(const std::string& str, const std::string&
     splits.push_back(str.substr(last));
     return splits;
 }
+
+} // namespace aoc

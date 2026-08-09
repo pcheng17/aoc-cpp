@@ -2,6 +2,9 @@
 #include <array>
 #include <vector>
 
+namespace aoc
+{
+
 class Solution05 final : public SolutionBase
 {
 public:
@@ -12,10 +15,7 @@ public:
     using Map = std::vector<MapRule>;
     using MapCollection = std::vector<Map>;
 
-    uint64_t partA() const override
-    {
-        return 0;
-    }
+    uint64_t partA() const override { return 0; }
 
     uint64_t partB() const override
     {
@@ -67,13 +67,16 @@ private:
                 continue;
             }
             const auto lineSplits = split(splits[i], " ");
-            map.push_back(MapRule{
-                std::stoull(lineSplits[0]),
-                std::stoull(lineSplits[1]),
-                std::stoull(lineSplits[2]) });
+            map.push_back(
+                MapRule{
+                    std::stoull(lineSplits[0]),
+                    std::stoull(lineSplits[1]),
+                    std::stoull(lineSplits[2])});
         }
         return map;
     }
 };
 
 // AOC_REGISTER(2023, 5, Solution05);
+
+} // namespace aoc

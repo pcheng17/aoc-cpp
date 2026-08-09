@@ -21,6 +21,8 @@ mkdir -p "$year"
 cat > "$file" <<EOF
 #include "registry.h"
 
+namespace aoc {
+
 class Solution$dd final : public SolutionBase
 {
 public:
@@ -38,6 +40,8 @@ public:
 };
 
 AOC_REGISTER($year, $day, Solution$dd);
+
+} // namespace aoc
 EOF
 
 echo "Created $file"

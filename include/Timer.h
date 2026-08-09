@@ -2,15 +2,20 @@
 
 #include <chrono>
 
+namespace aoc
+{
+
 class Timer
 {
 public:
-    void start() {
+    void start()
+    {
         mStart = std::chrono::high_resolution_clock::now();
         mRunning = true;
     }
 
-    void stop() {
+    void stop()
+    {
         if (mRunning) {
             mEnd = std::chrono::high_resolution_clock::now();
             mRunning = false;
@@ -23,8 +28,9 @@ public:
     double getElapsedNanoseconds() const { return getElapsedTime<std::chrono::nanoseconds>(); }
 
 private:
-    template <typename Units>
-    double getElapsedTime() const {
+    template<typename Units>
+    double getElapsedTime() const
+    {
         if (mRunning) {
             return -1.0;
         }
@@ -37,3 +43,5 @@ private:
     std::chrono::time_point<std::chrono::high_resolution_clock> mEnd;
     bool mRunning = false;
 };
+
+} // namespace aoc
