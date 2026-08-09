@@ -5,8 +5,13 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <utility>
 #include <vector>
+
+struct TimedResult
+{
+    uint64_t answer;
+    double milliseconds;
+};
 
 class SolutionBase
 {
@@ -28,12 +33,12 @@ public:
     virtual uint64_t partA() const = 0;
     virtual uint64_t partB() const = 0;
 
-    std::pair<uint64_t, double> runAndTimePartA() const
+    TimedResult runAndTimePartA() const
     {
         return runAndTime([this] { return partA(); });
     }
 
-    std::pair<uint64_t, double> runAndTimePartB() const
+    TimedResult runAndTimePartB() const
     {
         return runAndTime([this] { return partB(); });
     }
@@ -43,13 +48,13 @@ protected:
 
 private:
     template <typename Fn>
-    std::pair<uint64_t, double> runAndTime(Fn&& fn) const
+    TimedResult runAndTime(Fn&& fn) const
     {
         Timer timer;
         timer.start();
-        uint64_t result = fn();
+        uint64_t answer = fn();
         timer.stop();
-        return { result, timer.getElapsedMilliseconds() };
+        return { answer, timer.getElapsedMilliseconds() };
     }
 };
 

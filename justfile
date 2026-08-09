@@ -35,3 +35,7 @@ run-input year day input: build
 # Delete all build directories
 clean:
     rm -rf build build-debug
+
+# Scaffold a new day, e.g. `just new 2023 6`
+new year day:
+    scripts/new-day.sh {{year}} {{day}}

@@ -8,6 +8,14 @@
 #include <optional>
 #include <string>
 
+struct PuzzleId
+{
+    int year;
+    int day;
+
+    auto operator<=>(const PuzzleId&) const = default;
+};
+
 struct SolutionInfo
 {
     std::function<std::unique_ptr<SolutionBase>(const std::string&)> factory;
@@ -16,7 +24,7 @@ struct SolutionInfo
 };
 
 // Ordered by (year, day) so --all runs chronologically.
-using SolutionMap = std::map<std::pair<int, int>, SolutionInfo>;
+using SolutionMap = std::map<PuzzleId, SolutionInfo>;
 
 class Registry
 {
@@ -27,9 +35,9 @@ public:
         return registry;
     }
 
-    void add(int year, int day, SolutionInfo info)
+    void add(PuzzleId id, SolutionInfo info)
     {
-        mSolutions.emplace(std::make_pair(year, day), std::move(info));
+        mSolutions.emplace(id, std::move(info));
     }
 
     const SolutionMap& solutions() const { return mSolutions; }
@@ -42,9 +50,9 @@ private:
 
 struct Registrar
 {
-    Registrar(int year, int day, SolutionInfo info)
+    Registrar(PuzzleId id, SolutionInfo info)
     {
-        Registry::instance().add(year, day, std::move(info));
+        Registry::instance().add(id, std::move(info));
     }
 };
 
@@ -54,7 +62,7 @@ struct Registrar
 //   AOC_REGISTER(2023, 5, Solution05, 1181555926, 37806486)
 #define AOC_REGISTER(year, day, Class, ...)                                  \
     static const Registrar registrar_##year##_##day(                         \
-        year, day,                                                           \
+        PuzzleId{ year, day },                                               \
         SolutionInfo{                                                        \
             [](const std::string& filename)                                  \
                 -> std::unique_ptr<SolutionBase> {                           \
