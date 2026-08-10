@@ -28,12 +28,12 @@ class Solution$dd final : public SolutionBase
 public:
     using SolutionBase::SolutionBase;
 
-    int64_t partA() const override
+    Answer partA() const override
     {
         return 0;
     }
 
-    int64_t partB() const override
+    Answer partB() const override
     {
         return 0;
     }
