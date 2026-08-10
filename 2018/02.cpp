@@ -29,7 +29,8 @@ public:
     Answer partB() const override
     {
         std::vector<std::string_view> lines = split(mInput, "\n") | std::ranges::to<std::vector>();
-        std::sort(lines.begin(), lines.end());
+        std::ranges::sort(lines);
+
         for (size_t i = 0; i < lines.size() - 1; ++i)
         {
             const std::string_view a = lines[i];
