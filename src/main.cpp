@@ -36,7 +36,13 @@ bool checkAnswer(const char* label, const aoc::Answer& actual, const std::option
     return true;
 }
 
-bool runSolution(aoc::PuzzleId id, const aoc::SolutionInfo& info, const std::string& inputOverride)
+struct RunResult
+{
+    bool ok = false;
+    double milliseconds = 0.0;
+};
+
+RunResult runSolution(aoc::PuzzleId id, const aoc::SolutionInfo& info, const std::string& inputOverride)
 {
     const std::string inputPath = inputOverride.empty() ? resolveInputPath(id) : inputOverride;
 
@@ -54,19 +60,24 @@ bool runSolution(aoc::PuzzleId id, const aoc::SolutionInfo& info, const std::str
 
         const bool okA = checkAnswer("A", a.answer, info.expectedA);
         const bool okB = checkAnswer("B", b.answer, info.expectedB);
-        return okA && okB;
+        return {okA && okB, a.milliseconds + b.milliseconds};
     } catch (const std::exception& error) {
         std::cout << "   ⚠️  " << error.what() << std::endl;
-        return false;
+        return {false, 0.0};
     }
 }
 
 bool runAll()
 {
     bool allOk = true;
+    double totalMs = 0.0;
     for (const auto& [id, info] : aoc::Registry::instance().solutions()) {
-        allOk = runSolution(id, info, "") && allOk;
+        const RunResult result = runSolution(id, info, "");
+        allOk = result.ok && allOk;
+        totalMs += result.milliseconds;
     }
+    std::cout << std::fixed << std::setprecision(3) << "⏱️  Total: " << totalMs << " ms"
+              << std::endl;
     return allOk;
 }
 
@@ -102,5 +113,5 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    return runSolution(id, it->second, inputOverride) ? 0 : 1;
+    return runSolution(id, it->second, inputOverride).ok ? 0 : 1;
 }
